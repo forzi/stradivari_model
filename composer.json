@@ -1,0 +1,15 @@
+{
+    "name": "stradivari/model",
+    "description": "data model scheme validator",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Penkov Oleksii",
+            "email": "forziforzi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "stradivari/dic": "dev-master"
+    }
+}
