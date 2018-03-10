@@ -3,19 +3,20 @@
 namespace stradivari\model\scheme\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
+use stradivari\model\Dic;
 
-class NotIn extends ABase
-{
-    protected $message = 'is in deprecated list %s';
+class NotIn extends ABase {
+    protected $messageName = 'validator.tpl.notIn';
 
-    public function __invoke($value)
-    {
+    public function __invoke($value) {
+        $creatorResult = (new Dic)->get('adapter.Result');
+        $creatorValidator = (new Dic)->get('function.in_array');
         if (empty($this->verificator)) {
-            return new Result($value);
+            return $creatorResult->cast($value);
         }
-        if (!in_array($value, $this->verificator)) {
-            return new Result($value);
+        if (!$creatorValidator->call($value, $this->verificator)) {
+            return $creatorResult->cast($value);
         }
-        return new Result(null, [$this->getMessage()]);
+        return $creatorResult->cast(null, [$this->getMessage()]);
     }
 }

@@ -16,7 +16,7 @@ class Result
     protected $value;
     protected $errors;
 
-    public function __construct($value, array $errors = null)
+    public function __construct($value, array $errors = [])
     {
         $this->value = $value;
         $this->errors = $errors;

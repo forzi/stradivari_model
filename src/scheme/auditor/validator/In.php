@@ -3,19 +3,20 @@
 namespace stradivari\model\scheme\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
+use stradivari\model\Dic;
 
-class In extends ABase
-{
-    protected $message = 'is not in mandatory list %s';
+class In extends ABase {
+    protected $messageName = 'validator.tpl.in';
 
-    public function __invoke($value)
-    {
+    public function __invoke($value) {
+        $creatorResult = (new Dic)->get('adapter.Result');
+        $creatorValidator = (new Dic)->get('function.in_array');
         if (empty($this->verificator)) {
-            return new Result($value);
+            return $creatorResult->cast($value);
         }
-        if (in_array($value, $this->verificator)) {
-            return new Result($value);
+        if ($creatorValidator->call($value, $this->verificator)) {
+            return $creatorResult->cast($value);
         }
-        return new Result(null, [$this->getMessage()]);
+        return $creatorResult->cast(null, [$this->getMessage()]);
     }
 }

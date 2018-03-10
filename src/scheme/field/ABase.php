@@ -2,7 +2,7 @@
 
 namespace stradivari\model\scheme\field;
 
-use stradivari\model\Dic_Scheme;
+use stradivari\model\Dic;
 
 abstract class ABase
 {
@@ -18,7 +18,7 @@ abstract class ABase
         $this->description = isset($field['description']) ? (string)$field['description'] : null;
         $canBeEmpty = isset($field['canBeEmpty']) ? $field['canBeEmpty'] : $this->canBeEmpty;
         if (!$canBeEmpty) {
-            $this->auditors['canBeEmpty'] = (new Dic_Scheme)->get('validator.canBeEmpty')->cast([$canBeEmpty]);
+            $this->auditors['canBeEmpty'] = (new Dic)->get('validator.canBeEmpty')->cast($canBeEmpty);
         }
     }
 
@@ -27,8 +27,8 @@ abstract class ABase
         if (!isset($field[$name])) {
             return $this;
         }
-        $constructor = (new Dic_Scheme)->get("validator.{$name}") ?: (new Dic_Scheme)->get("mutator.{$name}");
-        $this->auditors[$name] = $constructor->cast([$field[$name]]);
+        $constructor = (new Dic)->get("validator.{$name}") ?: (new Dic)->get("mutator.{$name}");
+        $this->auditors[$name] = $constructor->cast($field[$name]);
         return $this;
     }
 }

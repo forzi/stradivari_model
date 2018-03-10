@@ -2,20 +2,21 @@
 
 namespace stradivari\model\scheme\auditor\validator;
 
+use stradivari\model\Dic;
 use stradivari\model\scheme\auditor\ABase;
 
-class Regexp extends ABase
-{
-    protected $message = 'does not match the regular expression %s';
+class Regexp extends ABase {
+    protected $messageName = 'validator.tpl.regexp';
 
-    public function __invoke($value)
-    {
+    public function __invoke($value) {
+        $creatorResult = (new Dic)->get('validator.regexp');
+        $creatorValidator = (new Dic)->get('function.preg_match');
         if (empty($this->verificator)) {
-            return new Result($value);
+            return $creatorResult->cast($value);
         }
-        if (!preg_match($this->verificator, $value)) {
-            return new Result($value);
+        if (!$creatorValidator->call($this->verificator, $value)) {
+            return $creatorResult->cast($value);
         }
-        return new Result(null, [$this->getMessage()]);
+        return $creatorResult->cast(null, [$this->getMessage()]);
     }
 }

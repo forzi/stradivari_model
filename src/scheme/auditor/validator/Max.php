@@ -3,16 +3,16 @@
 namespace stradivari\model\scheme\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
+use stradivari\model\Dic;
 
-class Max extends ABase
-{
-    protected $message = 'grater then %s';
+class Max extends ABase {
+    protected $messageName = 'validator.tpl.max';
 
-    public function __invoke($value)
-    {
+    public function __invoke($value) {
+        $creatorResult = (new Dic)->get('adapter.Result');
         if ($value > $this->verificator) {
-            return new Result(null, [$this->getMessage()]);
+            return $creatorResult->cast(null, [$this->getMessage()]);
         }
-        return new Result($value);
+        return $creatorResult->cast($value);
     }
 }

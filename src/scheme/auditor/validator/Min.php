@@ -3,16 +3,16 @@
 namespace stradivari\model\scheme\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
+use stradivari\model\Dic;
 
-class Min extends ABase
-{
-    protected $message = 'is less then %s';
+class Min extends ABase {
+    protected $messageName = 'validator.tpl.min';
 
-    public function __invoke($value)
-    {
+    public function __invoke($value) {
+        $creatorResult = (new Dic)->get('adapter.Result');
         if ($value < $this->verificator) {
-            return new Result(null, [$this->getMessage()]);
+            return $creatorResult->cast(null, [$this->getMessage()]);
         }
-        return new Result($value);
+        return $creatorResult->cast($value);
     }
 }
