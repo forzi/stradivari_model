@@ -1,6 +1,6 @@
 <?php
 
-namespace stradivari\model\scheme\auditor\validator;
+namespace stradivari\model\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
 use stradivari\model\Dic;

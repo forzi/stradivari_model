@@ -2,22 +2,15 @@
 
 namespace stradivari\model\scheme\field;
 
-use Package\Model\ClassMap;
-use Package\Model\Scheme\Validator\Str as ValidatorStr;
-use Package\Model\Scheme\Validator\Regexp as ValidatorStrRegexp;
-use Package\Model\Scheme\Validator\MaxLen as ValidatorStrMaxLen;
-use Package\Model\Scheme\Validator\MinLen as ValidatorStrMinLen;
-use Package\Model\Scheme\Validator\CutLen as ValidatorStrCutLen;
+use stradivari\model\Dic;
 
-class Str extends APrimitive
-{
-
+class Str extends APrimitive {
     public function __construct(array $field) {
-        $this->auditors['str'] = ClassMap::cast('mutator.str');
+        $this->auditors['str'] = (new Dic)->get('mutator.str')->cast();
         parent::__construct($field);
         $this->addAuditor('regexp', $field);
         if (isset($field['cutLen'])) {
-            $this->auditors['cutLen'] = ClassMap::cast('mutator.cutLen', [$field['cutLen']]);
+            $this->auditors['cutLen'] = (new Dic)->get('mutator.cutLen')->cast($field['cutLen']);
         }
         $this->addAuditor('maxLen', $field);
         $this->addAuditor('minLen', $field);

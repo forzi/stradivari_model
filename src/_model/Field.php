@@ -2,7 +2,4 @@
 
 namespace stradivari\model\model;
 
-
-class Model {
-
-}
+class Field extends APrimitive {}

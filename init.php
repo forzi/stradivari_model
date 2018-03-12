@@ -12,13 +12,13 @@ use stradivari\model\scheme\auditor\Result;
 
 use stradivari\model\scheme as scheme;
 use stradivari\model\scheme\field as field;
-use stradivari\model\scheme\auditor\mutator as mutator;
-use stradivari\model\scheme\auditor\validator as validator;
+use stradivari\model\auditor\mutator as mutator;
+use stradivari\model\auditor\validator as validator;
+use stradivari\model\model as model;
 
 $dicClass       = new Dic(Injection_Class::class);
 $dicValue       = new Dic(Injection_Value::class);
 $dicCallable    = new Dic(Injection_Callable::class);
-
 
 /* Adapters */
 $dicClass
@@ -35,7 +35,9 @@ $dicCallable
     ->set('function.substr',        'substr')
     ->set('function.strlen',        'strlen')
     ->set('function.preg_match',    'preg_match')
-    ->set('function.in_array',      'in_array');
+    ->set('function.in_array',      'in_array')
+    ->set('function.array_merge',   'array_merge')
+    ->set('function.strstr',        'strstr');
 
 /* Mutators */
 $dicClass
@@ -57,24 +59,52 @@ $dicValue
 
 /* Validators */
 $dicClass
-    ->set('validator.canBeEmpty', validator\CanBeEmpty::class)
-    ->set('validator.in',         validator\In::class)
-    ->set('validator.notIn',      validator\NotIn::class)
-    ->set('validator.min',        validator\Min::class)
-    ->set('validator.max',        validator\Max::class)
-    ->set('validator.minLen',     validator\MinLen::class)
-    ->set('validator.maxLen',     validator\MaxLen::class)
-    ->set('validator.regexp',     validator\Regexp::class);
+    ->set('validator.canBeOptional',    validator\CanBeOptional::class)
+    ->set('validator.canBeEmpty',       validator\CanBeEmpty::class)
+    ->set('validator.in',               validator\In::class)
+    ->set('validator.notIn',            validator\NotIn::class)
+    ->set('validator.min',              validator\Min::class)
+    ->set('validator.max',              validator\Max::class)
+    ->set('validator.minLen',           validator\MinLen::class)
+    ->set('validator.maxLen',           validator\MaxLen::class)
+    ->set('validator.regexp',           validator\Regexp::class);
 
 /* Validator Templates */
 $dicValue
-    ->set('validator.tpl.canBeEmpty',   'is empty')
-    ->set('validator.tpl.in',           'is not in mandatory list %s')
-    ->set('validator.tpl.notIn',        'is in deprecated list %s')
-    ->set('validator.tpl.min',          'is less then %s')
-    ->set('validator.tpl.max',          'grater then %s')
-    ->set('validator.tpl.minLen',       'is shorter than %s')
-    ->set('validator.tpl.maxLen',       'is longer than %s')
-    ->set('validator.tpl.regexp',       'does not match the regular expression %s');
+    ->set('validator.tpl.canBeOptional',    'is absent')
+    ->set('validator.tpl.canBeEmpty',       'is empty')
+    ->set('validator.tpl.in',               'is not in mandatory list %s')
+    ->set('validator.tpl.notIn',            'is in deprecated list %s')
+    ->set('validator.tpl.min',              'is less then %s')
+    ->set('validator.tpl.max',              'grater then %s')
+    ->set('validator.tpl.minLen',           'is shorter than %s')
+    ->set('validator.tpl.maxLen',           'is longer than %s')
+    ->set('validator.tpl.regexp',           'does not match the regular expression %s');
 
-var_dump($dicClass->get('validator.in')->cast([1,2,3,11.01])(11.01));
+/* Scheme */
+$dicClass
+    ->set('scheme.Collection',  scheme\Collection::class)
+    ->set('scheme.Scheme',      scheme\Scheme::class)
+    ->set('scheme.Bool',        field\Bool::class)
+    ->set('scheme.DateTime',    field\DateTime::class)
+    ->set('scheme.Float',       field\Float::class)
+    ->set('scheme.Int',         field\Int::class)
+    ->set('scheme.Str',         field\Str::class);
+
+/* Model */
+$dicClass
+    ->set('model.Field', model\Field::class)
+    ->set('model.Model', model\Model::class);
+
+$creator = $dicClass->get('scheme.Str');
+$field = $creator->cast([
+    'type'      => 'str',
+    'default'   => '',
+    'maxLen'    => 10,
+    'minLen'    => 2,
+    'notIn'     => ['o'],
+    'in'        => ['ololo'],
+    'regexp'    => '#^ololo#i'
+]);
+var_dump($field->validate('ololo'));
+

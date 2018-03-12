@@ -1,12 +1,12 @@
 <?php
 
-namespace stradivari\model\scheme\auditor\validator;
+namespace stradivari\model\auditor\validator;
 
 use stradivari\model\scheme\auditor\ABase;
 use stradivari\model\Dic;
 
-class NotIn extends ABase {
-    protected $messageName = 'validator.tpl.notIn';
+class In extends ABase {
+    protected $messageName = 'validator.tpl.in';
 
     public function __invoke($value) {
         $creatorResult = (new Dic)->get('adapter.Result');
@@ -14,7 +14,7 @@ class NotIn extends ABase {
         if (empty($this->verificator)) {
             return $creatorResult->cast($value);
         }
-        if (!$creatorValidator->call($value, $this->verificator)) {
+        if ($creatorValidator->call($value, $this->verificator)) {
             return $creatorResult->cast($value);
         }
         return $creatorResult->cast(null, [$this->getMessage()]);

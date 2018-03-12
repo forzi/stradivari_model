@@ -1,6 +1,6 @@
 <?php
 
-namespace Package\Model\Scheme;
+namespace stradivari\model\scheme;
 
 /*
  * name
@@ -11,28 +11,23 @@ namespace Package\Model\Scheme;
  *     defaultValue (optional | field is optional if set)
  *
  */
-class Scheme extends Field\AComposite implements \IteratorAggregate
-{
+class Scheme extends Field\AComposite implements \IteratorAggregate {
     protected $fields = [];
     protected $canBeEmpty = false;
 
-    public static function cast(array $scheme)
-    {
+    public static function cast(array $scheme) {
         return new self($scheme);
     }
-    public function __construct(array $scheme)
-    {
+    public function __construct(array $scheme) {
         parent::__construct($scheme);
         foreach ($scheme as $name => $field) {
             $this->fields[$name] = $this->castField($field);
         }
     }
-    public function __get($key)
-    {
+    public function __get($key) {
         return $this->fields[$key];
     }
-    public function getIterator()
-    {
+    public function getIterator() {
         $iterator = function () {
             foreach ($this->fields as $key => $val) {
                 yield $key => $val;

@@ -1,19 +1,18 @@
 <?php
 
-namespace Package\Model\Scheme;
+namespace stradivari\model\scheme;
 
-class Collection extends Field\AComposite
-{
+use stradivari\model\Dic;
+
+class Collection extends field\AComposite {
     protected $scheme;
 
-    public function __construct(array $field)
-    {
-        parent::__construct($field);
-        $field['type'] = strstr($field['type'], '__collection', true);
-        $this->field = $this->castField($field);
+    public function __construct(array $scheme) {
+        parent::__construct($scheme);
+        $field['type'] = (new Dic)->get('function.strstr')->call($scheme['type'], '__collection', true);
+        $this->scheme = $this->castField($scheme);
     }
-    public function __get($key)
-    {
+    public function __get($key) {
         if ($key == 'scheme') {
             return $this->scheme;
         }

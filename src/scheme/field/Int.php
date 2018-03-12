@@ -2,12 +2,12 @@
 
 namespace stradivari\model\scheme\field;
 
-use Package\Model\ClassMap;
+use stradivari\model\Dic;
 
 class Int extends ANumber
 {
     public function __construct(array $field) {
-        $this->auditors['int'] = ClassMap::cast('mutator.int');
+        $this->auditors['int'] = (new Dic)->get('mutator.int')->cast();
         parent::__construct($field);
     }
 }

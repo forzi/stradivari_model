@@ -1,6 +1,6 @@
 <?php
 
-namespace Package\Model\Model;
+namespace stradivari\model\model;
 
 abstract class AComposite extends ABase implements \IteratorAggregate, \ArrayAccess
 {

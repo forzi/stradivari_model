@@ -2,17 +2,15 @@
 
 namespace stradivari\model\scheme\field;
 
-use Package\Model\ClassMap;
-use Package\Model\Scheme\Collection;
+use stradivari\model\Dic;
+use stradivari\model\scheme\Collection;
 
-abstract class AComposite extends ABase
-{
-    protected function castField(array $field)
-    {
+abstract class AComposite extends ABase {
+    protected function castField(array $field) {
         $type = $field['type'];
         if (strtolower(strstr($type, '__collection'))) {
             /** @var Collection $collection */
-            $collection = ClassMap::cast('scheme.Collection', [$field]);
+            $collection = (new Dic)->get('scheme.Collection')->cast($field);
             $collection->parent = $this;
             return $collection;
         }
@@ -23,19 +21,19 @@ abstract class AComposite extends ABase
         }
         $type = ucfirst(strtolower($type));
         /** @var ABase $obj */
-        $obj = ClassMap::cast('scheme.' . $type, [$field]);
+        $constructorField = (new Dic)->get('scheme.' . $type);
+        $obj = $constructorField->cast($field);
         $obj->parent = $this;
-        return $field;
+        return $obj;
     }
-    public static function castByClassName($name, $field = [])
-    {
-        $scheme = ClassMap::cast('scheme.' . $name, [$field]);
-        if (!$scheme) {
+    public static function castByClassName($name, $field = []) {
+        $constructorScheme = (new Dic)->get('scheme.' . $name);
+        if (!$constructorScheme) {
             return null;
         }
-        if (!($scheme instanceof self)) {
+        if (!$constructorScheme->isSubclassOf(self::class)) {
             return null;
         }
-        return $scheme;
+        return $constructorScheme->cast($field);
     }
 }

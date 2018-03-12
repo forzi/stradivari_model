@@ -1,6 +1,6 @@
 <?php
 
-namespace stradivari\model\scheme\auditor\mutator;
+namespace stradivari\model\auditor\mutator;
 
 use stradivari\model\scheme\auditor\ABase;
 use stradivari\model\Dic;

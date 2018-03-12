@@ -2,12 +2,12 @@
 
 namespace stradivari\model\scheme\field;
 
-use Package\Model\ClassMap;
+use stradivari\model\Dic;
 
 class Float extends ANumber
 {
     public function __construct(array $field) {
-        $this->auditors['float'] = ClassMap::cast('mutator.float');
+        $this->auditors['float'] = (new Dic)->get('mutator.float')->cast();
         parent::__construct($field);
     }
 }

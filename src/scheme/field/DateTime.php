@@ -2,15 +2,14 @@
 
 namespace stradivari\model\scheme\field;
 
-use Package\Model\ClassMap;
+use stradivari\model\Dic;
 
-class DateTime extends ABase
-{
+class DateTime extends ABase {
     const DEFAULT_FORMAT = \DateTime::ATOM;
 
     public function __construct(array $field) {
         $format = isset($field['format']) ? $field['format'] : static::DEFAULT_FORMAT;
-        $this->auditors['DateTime'] = ClassMap::cast('mutator.DateTime', [$format]);
+        $this->auditors['DateTime'] = (new Dic)->get('mutator.DateTime')->cast($format);
         parent::__construct($field);
     }
 }
